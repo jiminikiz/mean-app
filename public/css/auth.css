@@ -1,0 +1,19 @@
+form {
+    padding: 0 20px;
+}
+
+#tabs {
+    margin: 40px auto;
+    width: 480px;
+}
+
+#tabs h1 {
+    margin: 0;
+    padding: 20px;
+}
+
+.tab-content {border: 1px solid #ddd;border-top: none;}
+
+.alert {
+    margin: 20px 0;
+}
