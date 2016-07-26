@@ -1,4 +1,4 @@
-# Simple Auth
+# MEAN and Simple Auth
 > Implement a simple registration / login form using this code base as a starting point!
 
 MEAN Stack:
