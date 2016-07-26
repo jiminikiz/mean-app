@@ -10,13 +10,13 @@ MEAN Stack:
 
 ### Getting Started
 
-1. Install [NodeJS](https://nodejs.org/en/)
-2. Install [MongoDB](https://www.mongodb.com/download-center?jmp=nav)
-3. Install module dependecies
+- Install [NodeJS](https://nodejs.org/en/)
+- Install [MongoDB](https://www.mongodb.com/download-center?jmp=nav)
+- Install module dependecies
 ```bash
     $ npm i; npm i -g nodemon
 ```
-4. Start the app!
+- Start the app!
 ```bash
     $ npm run dev
 ```
