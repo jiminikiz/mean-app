@@ -1,6 +1,6 @@
 'use strict'
 
-const SALT_WORK_FACTOR = 10
+const SALT = 10
 
 var mongoose = require('mongoose'),
     bcrypt = require('bcryptjs'),
@@ -12,15 +12,15 @@ var mongoose = require('mongoose'),
     })
 
 // hash passwords before saving them
-UserSchema.pre('save', function(next) {
+UserSchema.pre('save', (next) => {
     var user = this;
 
     // only hash the password if it has been modified (or is new)
-    if (!user.isModified('password')) {
+    if ( !user.isModified('password') ) {
         return next();
     }
     // generate a salt
-    bcrypt.genSalt(SALT_WORK_FACTOR, (saltErr, salt) => {
+    bcrypt.genSalt(SALT, (saltErr, salt) => {
         if (saltErr) {
             return next(saltErr);
         }
