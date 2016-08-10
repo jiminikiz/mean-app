@@ -20,7 +20,7 @@ var express = require('express'), // our framework!
     app = express(), // initialize express
     port = process.env.PORT||8888 // server port
 
-mongoose.connect('mongodb://localhost/donuts', ( error ) => {
+mongoose.connect('mongodb://localhost/app', ( error ) => {
     if( error ) {
         console.error('ERROR starting mongoose!', error)
         process.exit(128)
