@@ -1,15 +1,11 @@
 'use strict'
 
-var Auth = require('./auth')
+var Auth = require('./auth');
 
 module.exports = function(app) {
     // SITE ROOT
-    app.get('/', (req, res) => { // replace this with a landing or home page
-        if( req.session.user ) {
-            res.redirect('/dashboard')
-        } else {
-            res.redirect('/login')
-        }
+    app.get('/', (req, res) => { // replace this route with a landing or home page
+        req.session.user? res.redirect('/dashboard') : res.redirect('/login');
     });
     app.get('/login', Auth.render); // route for the login page
     app.get('/logout', Auth.logout); // route for logging out

@@ -12,7 +12,7 @@ var mongoose = require('mongoose'),
     })
 
 // hash passwords before saving them
-UserSchema.pre('save', (next) => {
+UserSchema.pre('save', function(next) {
     var user = this;
 
     // only hash the password if it has been modified (or is new)
