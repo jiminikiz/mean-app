@@ -6,10 +6,10 @@ var mongoose = require('mongoose'),
     bcrypt = require('bcryptjs'),
     UserSchema = new mongoose.Schema({
         name     : String,
-        email    : String,
+        email    : { type: String, unique: true },
         password : String,
         created  : Number // Date.now()
-    })
+    });
 
 // hash passwords before saving them
 UserSchema.pre('save', function(next) {

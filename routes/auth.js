@@ -7,6 +7,12 @@ var User = require('../models/user'),
             status: 500,
             message: 'Backend error'
         },
+        users: {
+            duplicate: {
+                status: 409,
+                message: 'User already exists!'
+            }
+        },
         login: {
             status: 403,
             message: 'Invalid username or password'
@@ -56,9 +62,15 @@ module.exports = {
         var newUser = new User(req.body)
 
         newUser.save((err, user) => {
-            if(err) {
-                console.error('ERROR saving newUser:', err)
-                res.status(500).send(errors.general)
+            if( err ) {
+                console.error('#ERROR#'.bold.red, err.message);
+                if( err.code === 11000 ) {
+                    res.status(errors.users.duplicate.status)
+                        .send(errors.users.duplicate);
+                } else {
+                    res.status(errors.general.status)
+                        .send(errors.general);
+                }
             } else {
                 req.session.user = user
                 res.send(user)
