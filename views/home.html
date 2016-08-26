@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/css/landing.css">
+    </head>
+    <body>
+        <section id="wrapper" class="container">
+            <header>
+                <nav class="navbar navbar-default">
+                    <ul class="nav navbar-nav">
+                        <li role="presentation" class="active"><a href="#home">Home</a></li>
+                        <li role="presentation"><a href="#profile">Profile</a></li>
+                    </ul>
+                </nav>
+            </header>
+            <div class="jumbotron">
+                <h1>You landed!</h1>
+                <p>Learn about all the things!</p>
+                <p>
+                    <a class="btn btn-primary btn-lg" href="/login" role="button">Login Now!</a>
+                </p>
+            </div>
+        </section>
+        <footer class="text-center">&copy; <%= new Date().getFullYear() %></footer>
+    </body>
+</html>

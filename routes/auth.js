@@ -21,7 +21,11 @@ var User = require('../models/user'),
 
 module.exports = {
     render: (req, res) => {
-        res.render('auth.html', req.session); // render the authenticaiton page (register/login)
+        if( req.session.user ) {
+            return res.redirect('/dashboard'); // if the user already has a session cookie, just place them into the dashboard
+        } else {
+            res.render('auth.html', req.session); // render the authenticaiton page (register/login)
+        }
     },
     logout: (req, res) => {
         req.session.user = null; // clears the users cookie session
@@ -51,8 +55,7 @@ module.exports = {
                         res.status(403).send(errors.login);
                     } else {
                         req.session.user = user; // set the user in the session!
-                        delete user.password; // remove the hashed password before sending back the result
-                        res.send(user); // send the
+                        res.send({ message: 'Login success' }); // send the
                     }
                 })
             }
