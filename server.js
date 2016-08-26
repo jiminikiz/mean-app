@@ -20,6 +20,8 @@ var express = require('express'), // our framework!
     app = express(), // initialize express
     port = process.env.PORT||8888 // server port
 
+
+
 mongoose.connect('mongodb://localhost/app', ( error ) => {
     if( error ) {
         console.error('ERROR starting mongoose!', error)
@@ -33,14 +35,14 @@ mongoose.connect('mongodb://localhost/app', ( error ) => {
 app.use(logger('dev'))  // mounting dev logging
 app.use(sessions) // mounting HTTPs session cookies
 
+// enable server-side rendering
+app.set('view engine', 'html')
+// use EJS as a templating engine
+app.engine('html', ejs.renderFile)
+
 // turn the public folder into a file server
 app.use(express.static(path.join(__dirname,'public')))
 
-// enable server-side rendering
-app.set('view engine', 'html')
-
-// use EJS as a templating engine
-app.engine('html', ejs.renderFile)
 
 // mount the body-parsing middleware to parse payload strings into `body` object stored in `req.body`
 app.post('*', bodyParser.json(), bodyParser.urlencoded({ extended:true }))
