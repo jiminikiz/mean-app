@@ -24,7 +24,7 @@ module.exports = {
         if( req.session.user ) {
             return res.redirect('/dashboard'); // if the user already has a session cookie, just place them into the dashboard
         } else {
-            res.render('auth.html', req.session); // render the authenticaiton page (register/login)
+            res.render('auth', req.session); // render the authenticaiton page (register/login)
         }
     },
     logout: (req, res) => {
@@ -55,7 +55,7 @@ module.exports = {
                         res.status(403).send(errors.login);
                     } else {
                         req.session.user = user; // set the user in the session!
-                        res.send({ message: 'Login success' }); // send the
+                        res.send({ message: 'Login success' }); // send a success message
                     }
                 })
             }
@@ -76,7 +76,7 @@ module.exports = {
                 }
             } else {
                 req.session.user = user
-                res.send(user)
+                res.send({ message: 'Register success' }); // send a success message
             }
         });
     },

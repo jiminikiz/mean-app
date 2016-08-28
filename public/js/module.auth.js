@@ -1,6 +1,6 @@
 (function(){
-    angular.module('app.auth', []) // declaring an angular module
-        .controller('app.auth.controller', Auth) // chaining a controller
+    angular.module('module.auth', []) // declaring an angular module
+        .controller('module.auth.controller', Auth) // chaining a controller
 
     Auth.$inject = ['$http'] // injecting the $http service
 
@@ -18,7 +18,9 @@
                 $http.post('/login', auth.payload).then(auth.login.success, auth.login.error)
             },
             success: function(res) {
-                location.href = '/dashboard'
+                // when login is successful, redirect them into the dashboard
+                console.info('auth.login.success', res.data);
+                location.href = "/dashboard";
             },
             error: function(err) {
                 console.error('Login.error', err)
@@ -31,7 +33,9 @@
                 $http.post('/register', auth.payload).then(auth.register.success, auth.register.error)
             },
             success: function(res) {
-                location.href = '/dashboard'
+                // when register is successful, also redirect them into the dashboard (already logged in, [req.session.user] on the backend)
+                console.info('auth.register.success', res.data);
+                location.href = "/dashboard";
             },
             error: function(err) {
                 console.error('Register:error', err)
