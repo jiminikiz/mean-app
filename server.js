@@ -6,7 +6,7 @@ var express = require('express'), // our framework!
     logger = require('morgan'), // log the routes being accessed by the frontend
     mongoose = require('mongoose'),
     sessions = require('client-sessions')({ // session cookie
-        cookieName : "_myAppName", // cookie name (within document.cookies on the Frontend)
+        cookieName : "_app", // cookie name (within document.cookies on the Frontend)
         secret: 'My$uP3R@W3$0M3$3CR3+', // encryption secret
         requestKey: 'session', // stores the session cookie in req.session
         duration: 86400, // one week in seconds = 60 * 60 * 24
@@ -18,8 +18,6 @@ var express = require('express'), // our framework!
     }),
     app = express(), // initialize express
     port = process.env.PORT||8888 // server port
-
-
 
 mongoose.connect('mongodb://localhost/app', ( error ) => {
     if( error ) {

@@ -17,7 +17,17 @@ var User = require('../models/user'),
             status: 403,
             message: 'Invalid username or password'
         }
-    };
+    },
+    messages = {
+        login: {
+            status: 200,
+            message: 'Login success'
+        },
+        register : {
+            status: 200,
+            message: 'Register success'
+        }
+    }
 
 module.exports = {
     render: (req, res) => {
@@ -46,7 +56,7 @@ module.exports = {
             } else {
                 console.info('auth.login.user =', user);
                 // If we got this far, then we know that the user exists. But did they put in the right password?
-                bcrypt.compare(req.body.password, user.password, (bcryptErr, matched)=>{
+                bcrypt.compare(req.body.password, user.password, (bcryptErr, matched) => {
                     if (bcryptErr) {
                         console.error('Error decrypting password:', bcryptErr);
                         res.status(500).send(errors.general);
@@ -55,11 +65,11 @@ module.exports = {
                         res.status(403).send(errors.login);
                     } else {
                         req.session.user = user; // set the user in the session!
-                        res.send({ message: 'Login success' }); // send a success message
+                        res.send(messages.login); // send a success message
                     }
-                })
+                });
             }
-        })
+        });
     },
     register: (req, res) => {
         var newUser = new User(req.body)
@@ -76,7 +86,7 @@ module.exports = {
                 }
             } else {
                 req.session.user = user
-                res.send({ message: 'Register success' }); // send a success message
+                res.send(messages.register); // send a success message
             }
         });
     },
