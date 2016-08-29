@@ -31,7 +31,7 @@ var User = require('../models/user'),
 
 module.exports = {
     render: (req, res) => {
-        if( req.session.user ) {
+        if( req.session.uid ) {
             return res.redirect('/dashboard'); // if the user already has a session cookie, just place them into the dashboard
         } else {
             res.render('auth', req.session); // render the authenticaiton page (register/login)
@@ -64,7 +64,7 @@ module.exports = {
                         console.warn('Passwords do not match for:', user);
                         res.status(403).send(errors.login);
                     } else {
-                        req.session.user = user; // set the user in the session!
+                        req.session.uid = user._id; // set the user in the session!
                         res.send(messages.login); // send a success message
                     }
                 });
@@ -91,7 +91,7 @@ module.exports = {
         });
     },
     session: (req, res, next) => {
-        if( req.session.user ) {
+        if( req.session.uid ) {
             next();
         } else {
             res.redirect('/login');
