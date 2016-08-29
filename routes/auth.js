@@ -27,7 +27,7 @@ var User = require('../models/user'),
             status: 200,
             message: 'Register success'
         }
-    }
+    };
 
 module.exports = {
     render: (req, res) => {
@@ -38,7 +38,7 @@ module.exports = {
         }
     },
     logout: (req, res) => {
-        req.session.user = null; // clears the users cookie session
+        req.session.reset(); // clears the users cookie session
         res.redirect('/login');
     },
     login: (req, res) => {
