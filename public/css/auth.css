@@ -1,26 +1,35 @@
-body {
-    margin-top: 40px;
+#login {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
-form {
+#login .btn {
+    color: black;
+    background-color: #febc5b;
+    transition:
+        background-color 300ms ease-in-out,
+        border 300ms ease-in-out;
     padding: 20px;
+    margin-top: 20px;
+    box-shadow: 4px 4px 5px #ccc;
 }
 
-.alert {
-    margin: 20px 0;
+#login .btn:hover {
+    color: black;
+    background-color: #FDA82A;
 }
 
-.tab-content {
-    border: 1px solid #ddd;
-    border-top: none;
+#login .fa {
+    padding: 0 40px;
+    font-size: 200px;
 }
 
-#tabs {
-    margin: 40px auto;
-    width: 480px;
-}
-
-#tabs h1 {
-    margin: 0;
-    padding: 20px;
+#login h1 {
+    font-size: 4em;
+    vertical-align: text-bottom;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
 }
