@@ -1,35 +1,14 @@
-#login {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+#tabs h1 {
+    margin: 0;
 }
 
-#login .btn {
-    color: black;
-    background-color: #febc5b;
-    transition:
-        background-color 300ms ease-in-out,
-        border 300ms ease-in-out;
-    padding: 20px;
-    margin-top: 20px;
-    box-shadow: 4px 4px 5px #ccc;
+#tabs {
+    width: 480px;
+    margin: 40px auto;
 }
 
-#login .btn:hover {
-    color: black;
-    background-color: #FDA82A;
-}
-
-#login .fa {
-    padding: 0 40px;
-    font-size: 200px;
-}
-
-#login h1 {
-    font-size: 4em;
-    vertical-align: text-bottom;
-    text-transform: uppercase;
-    font-weight: bold;
-    letter-spacing: 1px;
+#tabs .tab-content {
+    padding: 40px;
+    border: 1px solid #dddddd;
+    border-top: none;
 }
