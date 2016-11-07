@@ -1,6 +1,6 @@
 'use strict'
 
-var Auth = require('./auth');
+var Auth = require('./controllers/auth');
 
 module.exports = function(app) {
     // SITE ROOT
