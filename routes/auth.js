@@ -85,7 +85,7 @@ module.exports = {
                         .send(errors.general);
                 }
             } else {
-                req.session.user = user
+                req.session.uid = user._id; // set the user in the session!
                 res.send(messages.register); // send a success message
             }
         });
