@@ -64,7 +64,7 @@ module.exports = {
                         console.warn('Passwords do not match for:', user);
                         res.status(403).send(errors.login);
                     } else {
-                        req.session.uid = user._id; // set the user in the session!
+                        req.session.user = user; // set the user in the session!
                         res.send(messages.login); // send a success message
                     }
                 });
@@ -90,8 +90,8 @@ module.exports = {
             }
         });
     },
-    session: (req, res, next) => {
-        if( req.session.uid ) {
+    protect: (req, res, next) => {
+        if( req.session.user && req.session.user.enabled ) {
             next();
         } else {
             res.redirect('/login');

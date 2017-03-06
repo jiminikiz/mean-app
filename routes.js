@@ -1,6 +1,9 @@
 'use strict'
 
-var Auth = require('./controllers/auth');
+var Auth = require('./controllers/auth'),
+    CRUD = require('./controllers/crud'),
+    Render = require('./controllers/render'),
+    Middlewares = require('./controllers/middlewares');
 
 module.exports = function(app) {
     // SITE ROOT
@@ -14,8 +17,23 @@ module.exports = function(app) {
     app.post('/register', Auth.register); // form request endpoint for user registration
 
     // DAHSBOARD
-    app.all('/dashboard*', Auth.session); // protect all dashboard routes from unauthorized users
-    app.get('/dashboard', (req, res) => { // renders the dashboard, break this out into another controller if needed!
-        res.render('dashboard', req.session)
-    });
-}
+
+    app.put('/api/users/:id', Auth.admin, Users.update);
+
+    // API :: CRUD
+    app.route('/api/:model*')
+        .all(CRUD.middlewares.params)
+    app.route('/api/:model')
+        .get(CRUD.read)
+        .post(CRUD.create)
+    app.route('/api/:model/:id')
+        .get(CRUD.read)
+        .put(CRUD.update)
+        .delete(CRUD.delete);
+
+    app.all('/dashboard*', Auth.protect); // protect all dashboard routes from unauthorized users
+
+    app.get('*', Render.session);
+
+    app.use(express.static('public'));
+};
