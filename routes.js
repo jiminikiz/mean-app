@@ -6,6 +6,8 @@ var Auth = require('./controllers/auth'),
     Middlewares = require('./controllers/middlewares');
 
 module.exports = function(app) {
+    Render.init(app.get('views'));
+
     // SITE ROOT
     app.get('/', (req, res) => { // replace this route with a landing or home page, or break this out into another controller if needed!
         res.render('home');
