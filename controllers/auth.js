@@ -16,6 +16,10 @@ var User = require('../models/user'),
         login: {
             status: 403,
             message: 'Invalid username or password'
+        },
+        forbidden: {
+            status: 403,
+            message: 'Forbidden'
         }
     },
     messages = {
@@ -30,11 +34,19 @@ var User = require('../models/user'),
     };
 
 module.exports = {
-    render: (req, res) => {
-        if( req.session.uid ) {
-            return res.redirect('/dashboard'); // if the user already has a session cookie, just place them into the dashboard
-        } else {
-            res.render('auth', req.session); // render the authenticaiton page (register/login)
+    middlewares: {
+        protect: (req, res, next) => {
+            if( req.session.user && req.session.user.enabled ) {
+                next();
+            } else {
+                res.redirect('/login');
+            }
+        },
+        session: (req, res, next) => {
+            if(req.session.user) {
+                return res.redirect('/dashboard');
+            }
+            next();
         }
     },
     logout: (req, res) => {
@@ -90,11 +102,10 @@ module.exports = {
             }
         });
     },
-    protect: (req, res, next) => {
-        if( req.session.user && req.session.user.enabled ) {
-            next();
-        } else {
-            res.redirect('/login');
+    session: (req, res) => {
+        if(res.session) {
+            return res.send(req.session.user);
         }
+        res.status(errors.forbidden.status).send(errors.forbidden)
     }
 };

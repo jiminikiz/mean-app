@@ -1,39 +1,32 @@
-'use strict'
+const express = require('express');
+const Auth = require('./controllers/auth');
+const CRUD = require('./controllers/crud');
+const Render = require('./controllers/render');
+// const Middlewares = require('./controllers/middlewares');
 
-var Auth = require('./controllers/auth'),
-    CRUD = require('./controllers/crud'),
-    Render = require('./controllers/render'),
-    Middlewares = require('./controllers/middlewares');
-
-module.exports = function(app) {
+module.exports = (app) => {
     Render.init(app.get('views'));
 
     // SITE ROOT
-    app.get('/', (req, res) => { // replace this route with a landing or home page, or break this out into another controller if needed!
-        res.render('home');
-    });
-    app.get('/login', Auth.render); // route for the login page
+    app.get('/login', Auth.middlewares.session);
     app.get('/logout', Auth.logout); // route for logging out
 
     app.post('/login', Auth.login); // form request emdpoint for loggin in
     app.post('/register', Auth.register); // form request endpoint for user registration
 
-    // DAHSBOARD
-
-    app.put('/api/users/:id', Auth.admin, Users.update);
-
-    // API :: CRUD
+    // API::CRUD
     app.route('/api/:model*')
-        .all(CRUD.middlewares.params)
+        .all(CRUD.middlewares.params);
     app.route('/api/:model')
         .get(CRUD.read)
-        .post(CRUD.create)
+        .post(CRUD.create);
     app.route('/api/:model/:id')
         .get(CRUD.read)
         .put(CRUD.update)
         .delete(CRUD.delete);
 
-    app.all('/dashboard*', Auth.protect); // protect all dashboard routes from unauthorized users
+    // DAHSBOARD
+    app.all('/dashboard*', Auth.middlewares.protect); // protect all dashboard routes from unauthorized users
 
     app.get('*', Render.session);
 

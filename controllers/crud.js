@@ -1,120 +1,77 @@
-var Models = require('../models');
+var CRUD = require('../crud');
 
-var CRUD = {
+module.exports = {
     middlewares: {
         params: (req, res, next) => {
-            if (!Models[req.params.model]) {
-                CRUD.log.error({
-                    message: 'Bad Request'
-                }, req);
-
-                return res.status(400).send({
-                    message: 'Bad Request',
-                    path: req.path,
-                    model: req.params.model
-                });
+            if(CRUD.valid.params(req.params.entity)) {
+                return next();
             }
-
-            next();
-        }
-    },
-    log: {
-        error: (err, req) => {
-            console.error('[controller.crud.error]'.bold.red, '\n', {
-                err: err,
-                path: req.path,
-                model: req.params.model,
-                query: req.query,
-                body: req.body
-            });
+            res.status(400).send(Object.assign({
+                entity: req.params.entity
+            }, CRUD.errors.params));
         }
     },
     create: (req, res) => {
-        new Models[req.params.model](req.body).save((err, newDoc) => {
+        CRUD.create({
+            entity: req.params.entity,
+            data: req.body,
+        }, (err, result) => {
             if (err) {
-                CRUD.log.error(err, req);
-                return res.status(500).send(err);
+                return res.status(500).send({ error: err.message });
             }
-            res.send(newDoc);
+            res.send(result);
         });
     },
     read: (req, res) => {
-        var method, queryparams, fields, sort, select;
-
-        if(req.query.populate) {
-            fields = req.query.populate.split(',')||[];
-            delete req.query.populate;
-        }
-
-        if(req.query.sort) {
-            sort = req.query.sort;
-            delete req.query.sort;
-        }
-
-        if(req.query.select) {
-            select = req.query.select;
-            delete req.query.select;
-        }
-
-        if(req.params.id) {
-            method = 'findById',
-            queryparams = req.params.id;
-
-        } else {
-            method = 'find';
-            queryparams = req.query;
-        }
-
-        var Query = Models[req.params.model][method](queryparams).lean();
-
-        if(select) {
-            Query = Query.select(select);
-        }
-
-        if (fields) {
-            Query = Query.populate(fields);
-        }
-
-        if (sort) {
-            Query = Query.sort(sort);
-        }
-
-
-        Query.exec((err, doc) => {
+        CRUD.read({
+            id: req.params.id,
+            entity: req.params.entity,
+            params: req.query
+        }, (err, result) => {
             if (err) {
-                CRUD.log.error(err, req);
-                res.status(500).send(err);
-            } else {
-                res.send(doc);
+                return res.status(500).send({ error: err.message });
             }
+            res.send(result);
         });
     },
     update: (req, res) => {
-        // console.log('[DEBUG]: crud.update', req.body);
-        Models[req.params.model].findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            { new: true },
-            (err, updatedDoc) => {
-                if (err) {
-                    CRUD.log.error(err, req);
-                    return res.status(500).send(err);
-                }
-                res.send(updatedDoc);
-            });
+        CRUD.update({
+            entity: req.params.entity,
+            id: req.params.id,
+            data: req.body
+        }, (err, result) => {
+            if (err) {
+                return res.status(500).send({ error: err.message });
+            }
+            res.send(result);
+        });
     },
     delete: (req, res) => {
-        Models[req.params.model].findByIdAndRemove(req.params.id, (err) => {
+        CRUD.delete({
+            entity: req.params.entity,
+            id: req.params.id
+        }, (err) => {
             if (err) {
-                CRUD.log.error(err, req);
-                return res.status(500).send(err);
+                return res.status(500).send({ error: err.message });
             }
             res.send({
                 id: req.params.id,
                 message: 'deleted'
             });
         });
+    },
+    count: (req, res) => {
+        CRUD.count({
+            entity: req.params.entity,
+            field: req.query.field,
+            match: req.query.match,
+            sort: req.query.sort,
+            limit: req.query.limit
+        }, (err, counts) => {
+            if(err) {
+                return res.status(500).send({ error: err.message });
+            }
+            res.send(counts);
+        });
     }
 };
-
-module.exports = CRUD;
