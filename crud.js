@@ -1,38 +1,54 @@
 const CRUD = {
     models: require('./models'),
     errors: {
-        params: {
+        invalid: {
             status: 400,
-            message: 'Bad API parameters',
-            error: 'Entity not found'
+            message: 'Invalid query!'
+        },
+        forbidden: {
+            status: 403,
+            message: 'Request not authenticated'
+        },
+        entity: {
+            status: 404,
+            message: 'Entity does not exist'
+        },
+        notFound: {
+            status: 404,
+            message: 'There is no model for given :{id}'
+        },
+        general: {
+            status: 500,
+            message: 'Database Error'
         }
     },
     valid: {
-        params: (entity) => {
+        entity: (entity) => {
             return CRUD.models[entity] !== undefined;
         }
     },
-    create: (options, callback) => {
-        if(!CRUD.valid.params(options.entity) || !options.data) {
-            return callback({ message: '[crud:create] invalid options', options: options });
+    error: (model, err, res) => {
+        console.error(`[controller.${model}.error]:`, err);
+
+        let message = {
+            error: err.message,
+        };
+
+        if(err.errors && err.errors.text && err.errors.text.message) {
+            message.cause = err.errors.text.message;
         }
+
+        return res && res.status(err.status||500).json(message);
+    },
+    create: (options, callback) => {
         new CRUD.models[options.entity](options.data).save((err, data) => {
             if(err) {
                 console.error('[module.crud.create.error]:'.bold.red, err.message, err.errors);
-            } callback(err, data);
+            }
+            callback(err, data);
         });
     },
     read: (options, callback) => {
-        if(!CRUD.valid.params(options.entity)) {
-            if(callback) {
-                return callback({
-                    message: '[crud:read] invalid options',
-                    options: options
-                });
-            }
-            return;
-        }
-
         let method, query,
             params = options.params || {},
             fields = params.populate && params.populate.split(',') || [],
@@ -64,30 +80,35 @@ const CRUD = {
             Query.exec((err, data) => {
                 if(err) {
                     console.error('[module.crud.read.error]:'.bold.red, err.message);
-                } callback(err, data);
+                    return callback(err, null);
+                }
+                if(!data) {
+                    return callback(CRUD.errors.notFound, null);
+                }
+                callback(null, data);
             });
         }
 
         return Query;
     },
     update: (options, callback) => {
-        if( !CRUD.valid.params(options.entity)  || !options.data || !options.id ) {
-            return callback({ message: '[crud:update] invalid options', options: options });
-        }
-        CRUD.models[options.entity].findByIdAndUpdate(options.id, options.data, { new: true }, (err, data) => {
+        CRUD.models[options.entity].findById(options.id, (err, model) => {
             if(err) {
                 console.error('[module.crud.update.error]:'.bold.red, err.message);
-            } callback(err, data);
+                return callback(err);
+            }
+            if(!model) {
+                return callback(null, model);
+            }
+
+            for(let key in options.data) {
+                model[key] = options.data[key];
+            }
+
+            model.save(callback);
         });
     },
     delete: (options, callback) => {
-        if( !CRUD.valid.params(options.entity)  || !options.id ) {
-            return callback({
-                message: '[crud:delete] invalid options',
-                options: options
-            });
-        }
-
         // Removing documents this way will NOT trigger the 'Model.post' middleware for a given model
         // CRUD.models[options.entity].findByIdAndRemove(options.id, (err, data) => {
         //     if(err) {
@@ -105,13 +126,6 @@ const CRUD = {
         });
     },
     count: (options, callback) => {
-        if( !CRUD.valid.params(options.entity) || !options.field ) {
-            return callback({
-                message: '[crud:count] invalid options',
-                options: options
-            });
-        }
-
         let aggregation = [{
             $group: {
                 _id: `$${options.field}`,
@@ -119,6 +133,7 @@ const CRUD = {
             }
         }];
 
+        // couldn't get this to work, will try again in the future
         // if(options.match) {
         //     let $match = {};
         //     $match[options.match.key] = options.match.value;

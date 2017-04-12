@@ -1,5 +1,4 @@
 module.exports = {
-    users:    require('./user'),
-    groups:   require('./groups'),
-    profiles: require('./profile')
+    accounts: require('./account'),
+    groups:   require('./group')
 };

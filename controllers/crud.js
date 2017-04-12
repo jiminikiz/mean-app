@@ -3,12 +3,10 @@ var CRUD = require('../crud');
 module.exports = {
     middlewares: {
         params: (req, res, next) => {
-            if(CRUD.valid.params(req.params.entity)) {
+            if(CRUD.valid.entity(req.params.entity)) {
                 return next();
             }
-            res.status(400).send(Object.assign({
-                entity: req.params.entity
-            }, CRUD.errors.params));
+            res.status(CRUD.errors.entity.status).json(CRUD.errors.entity);
         }
     },
     create: (req, res) => {
@@ -17,9 +15,9 @@ module.exports = {
             data: req.body,
         }, (err, result) => {
             if (err) {
-                return res.status(500).send({ error: err.message });
+                return res.status(CRUD.errors.general.status).json(err);
             }
-            res.send(result);
+            res.json(result);
         });
     },
     read: (req, res) => {
@@ -29,9 +27,9 @@ module.exports = {
             params: req.query
         }, (err, result) => {
             if (err) {
-                return res.status(500).send({ error: err.message });
+                return res.status(CRUD.errors.general.status).json(err);
             }
-            res.send(result);
+            res.json(result);
         });
     },
     update: (req, res) => {
@@ -41,9 +39,9 @@ module.exports = {
             data: req.body
         }, (err, result) => {
             if (err) {
-                return res.status(500).send({ error: err.message });
+                return res.status(CRUD.errors.general.status).json(err);
             }
-            res.send(result);
+            res.json(result);
         });
     },
     delete: (req, res) => {
@@ -52,9 +50,10 @@ module.exports = {
             id: req.params.id
         }, (err) => {
             if (err) {
-                return res.status(500).send({ error: err.message });
+                return res.status(CRUD.errors.general.status).json(err);
             }
-            res.send({
+            res.json({
+                entity: req.params.entity,
                 id: req.params.id,
                 message: 'deleted'
             });
@@ -69,9 +68,9 @@ module.exports = {
             limit: req.query.limit
         }, (err, counts) => {
             if(err) {
-                return res.status(500).send({ error: err.message });
+                return res.status(CRUD.errors.general.status).json(err);
             }
-            res.send(counts);
+            res.json(counts);
         });
     }
 };

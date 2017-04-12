@@ -19,9 +19,9 @@ require('./db', Config.db, (err) => {
             path: `${__dirname}/public`,    // String, default is `${__dirname}/views`
             engine: `ejs`,                  // String, default is undefined
         },
-        routes: {
-            path: `${__dirname}/routes`,    // String, default is undefined
-        }
+        // routes: {
+        //     path: `${__dirname}/routes`,    // String, default is undefined
+        // }
         // fileServer: {
         //     path: `${__dirname}/public`     // String, default is undefined
         // },

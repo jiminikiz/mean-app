@@ -1,11 +1,9 @@
 const express = require('express');
 const Auth = require('./controllers/auth');
 const CRUD = require('./controllers/crud');
-const Render = require('./controllers/render');
 // const Middlewares = require('./controllers/middlewares');
 
 module.exports = (app) => {
-    Render.init(app.get('views'));
 
     // SITE ROOT
     app.get('/login', Auth.middlewares.session);
@@ -27,8 +25,6 @@ module.exports = (app) => {
 
     // DAHSBOARD
     app.all('/dashboard*', Auth.middlewares.protect); // protect all dashboard routes from unauthorized users
-
-    app.get('*', Render.session);
 
     app.use(express.static('public'));
 };
