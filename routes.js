@@ -5,26 +5,26 @@ const CRUD = require('./controllers/crud');
 
 module.exports = (app) => {
 
-    // SITE ROOT
-    app.get('/login', Auth.middlewares.session);
-    app.get('/logout', Auth.logout); // route for logging out
+  // SITE ROOT
+  app.get('/login', Auth.middlewares.session);
+  app.get('/logout', Auth.logout); // route for logging out
 
-    app.post('/login', Auth.login); // form request emdpoint for loggin in
-    app.post('/register', Auth.register); // form request endpoint for user registration
+  app.post('/login', Auth.login); // form request emdpoint for loggin in
+  app.post('/register', Auth.register); // form request endpoint for user registration
 
-    // API::CRUD
-    app.route('/api/:model*')
-        .all(CRUD.middlewares.params);
-    app.route('/api/:model')
-        .get(CRUD.read)
-        .post(CRUD.create);
-    app.route('/api/:model/:id')
-        .get(CRUD.read)
-        .put(CRUD.update)
-        .delete(CRUD.delete);
+  // API::CRUD
+  app.route('/api/:model*')
+    .all(CRUD.middlewares.params);
+  app.route('/api/:model')
+    .get(CRUD.read)
+    .post(CRUD.create);
+  app.route('/api/:model/:id')
+    .get(CRUD.read)
+    .put(CRUD.update)
+    .delete(CRUD.delete);
 
-    // DAHSBOARD
-    app.all('/dashboard*', Auth.middlewares.protect); // protect all dashboard routes from unauthorized users
+  // DASHBOARD
+  app.all('/dashboard*', Auth.middlewares.protect); // protect all dashboard routes from unauthorized users
 
-    app.use(express.static('public'));
+  app.use(express.static('public'));
 };

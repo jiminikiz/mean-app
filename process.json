@@ -1,16 +1,16 @@
 {
-    "apps": [{
-        "name": "mean-app",
-        "script": "server.js",
-        "env": {
-            "NODE_ENV": "development",
-        },
-        "env_production": {
-            "NODE_ENV": "production"
-        },
-        "watch": true,
-        "watch_options": {
-            "usePolling": true
-        }
-    }]
+  "apps": [{
+    "name": "mean-app",
+    "script": "server.js",
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "env_production": {
+      "NODE_ENV": "production"
+    },
+    "watch": true,
+    "watch_options": {
+      "usePolling": true
+    }
+  }]
 }

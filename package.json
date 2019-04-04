@@ -7,14 +7,14 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm run prod",
     "prod": "sudo -E pm2 start process.json --env production",
-    "dev": "sudo -E pm2 start process.json --env developement && sudo pm2 logs",
+    "dev": "pm2 start process.json && pm2 logs",
     "dump": "mongodump --db mean-app -o ./dump",
     "restore": "mongorestore dump"
   },
   "author": "jiminikiz",
   "license": "ISC",
   "dependencies": {
-    "bcryptjs": "^2.3.0",
+    "bcrypt": "^3.0.5",
     "mongoose": "^4.9.4",
     "stackular": "jiminikiz/stackular"
   },

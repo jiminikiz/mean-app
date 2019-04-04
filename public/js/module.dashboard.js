@@ -1,6 +1,7 @@
-angular.module('module.dashboard', [])
-    .controller('DashboardController', Dashboard);
+angular
+  .module('module.dashboard', [])
+  .controller('DashboardController', Dashboard);
 
 function Dashboard() {
-    console.info('Dashboard.initialized');
+  console.info('Dashboard.initialized');
 }

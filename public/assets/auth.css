@@ -1,18 +1,18 @@
 body {
-    margin-top: 40px;
+  margin-top: 40px;
 }
 
 #tabs h1 {
-    margin: 0;
+  margin: 0;
 }
 
 #tabs {
-    width: 480px;
-    margin: 40px auto;
+  width: 480px;
+  margin: 40px auto;
 }
 
 #tabs .tab-content {
-    padding: 40px;
-    border: 1px solid #dddddd;
-    border-top: none;
+  padding: 40px;
+  border: 1px solid #dddddd;
+  border-top: none;
 }
