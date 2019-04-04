@@ -4,7 +4,7 @@ EXPOSE 8888
 
 WORKDIR /app
 
-RUN apk add --no-cache git python make g++
+RUN apk add --no-cache python make g++
 
 # COPY source files
 COPY . .
@@ -13,8 +13,4 @@ COPY . .
 ENV NPM_CONFIG_LOGLEVEL error
 RUN npm install --production
 
-# SHOW current folder structure in logs
-# RUN ls -al -R
-
-# CMD [ "pm2-runtime", "start", "process.json" ]
-CMD ["npm", "run", "dev"]
+CMD [ "pm2-runtime", "start", "process.json" ]
